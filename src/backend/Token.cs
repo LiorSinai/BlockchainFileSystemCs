@@ -90,7 +90,7 @@ public class Token
             else if (fileSize > 1_000_000) { outstring += (fileSize/1000000) + "MB\n";}
             else if (fileSize > 1_000)     { outstring += (fileSize/1000) + "kB\n";}
             else { outstring += fileSize + "B\n";}
-            outstring += "file data: ";
+            
             if (fileSize * 2 > show_max){
                 for (int i = 0; i < show_start; i++) {
                     outstring += String.Format("{0:x2}", contents[i]);
@@ -107,7 +107,15 @@ public class Token
         }
         catch (FileNotFoundException) {
             outstring += "0\n";
-            outstring += "file data: WARNING: no file loaded from " + filePath + "\n";
+            outstring += "FileData: FileNotFoundException: no file loaded from " + filePath + "\n";
+        }
+        catch (DirectoryNotFoundException) {
+            outstring += "0\n";
+            outstring += "FileData: DirectoryNotFoundException: no file loaded from " + filePath + "\n";
+        }
+        catch (Exception e) {
+            outstring += "0\n";
+            outstring += "FileData: " + e.GetType() + ": no file loaded from " + filePath + "\n";
         }
         outstring += "token creation time UTC: " + this.TimeStamp;
 
