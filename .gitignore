@@ -8,7 +8,6 @@
 *.obj
 
 # C#
-*.csproj
 *obj/
 *bin/
 
