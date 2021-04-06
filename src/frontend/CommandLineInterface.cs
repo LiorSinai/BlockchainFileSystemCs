@@ -30,6 +30,7 @@ public class CommandLineInterface
     {
         Options = new List<CLIOption>();
         Options.Add(new CLIOption("-c", "--commit-block", "", "commit a block to the blockchain", new CLIactionDelegate(CommitBlock)));
+        Options.Add(new CLIOption("",   "--demo", "", "run a demo", new CLIactionDelegate(Demos.RunDemo)));
         Options.Add(new CLIOption("",   "--header", "[index]", "show the hexadecimal header for a block", new CLIactionDelegate(PrintHeader)));
         Options.Add(new CLIOption("-h", "--help", "", "display this help menu", new CLIactionDelegate(Help)));
         Options.Add(new CLIOption("-i", "--initialise", "name", "initialise a new blockchain", new CLIactionDelegate(InitialiseBlockchain)));
@@ -153,6 +154,10 @@ public class CommandLineInterface
         {
             Console.WriteLine("Must include a name in the argument");
         }
+        else if (args.Argv[0].StartsWith('.') || args.Argv[0].EndsWith('.') )
+        {
+            Console.WriteLine("Invalid directory name. Cannot start or end with .");
+        }
         else
         {
             string name = args.Argv[0];
@@ -208,16 +213,18 @@ public class CommandLineInterface
         }
         try{
             blockchain = BlockchainLoader.loadFromJson(fileName, dirPath);
+            this.Verify(args); //redoing this for visual purposes
             int next_idx = blockchain.Index() + 1;
             Console.WriteLine("Creating a new directory at " + blockchain.BlockchainDirectory + "/Block" + next_idx);
             block = blockchain.MakeBlock();
             Console.WriteLine("Done");
         }
         catch (InvalidBlockchainException e){
-            Console.WriteLine("ERROR: " + e.ToString());
+            //Console.WriteLine("ERROR: " + e.ToString());
+            Console.WriteLine("ERROR: " + Utilities.ExceptionWithoutStackTrace(e));
         }
         catch (Exception e){
-            Console.WriteLine("ERROR: " + e.ToString());
+            Console.WriteLine("ERROR: " + Utilities.ExceptionWithoutStackTrace(e));
         }
     } //LoadBlockchain
 
@@ -421,10 +428,12 @@ public class CommandLineInterface
             Console.WriteLine("Verified.");
         }
         catch (InvalidBlockchainException e){
-            Console.WriteLine("ERROR: " + e.ToString());
+            //Console.WriteLine("ERROR: " + e.ToString());
+            Console.WriteLine("ERROR: " + Utilities.ExceptionWithoutStackTrace(e));
         }
         catch (Exception e){
-            Console.WriteLine("ERROR: " + e.ToString());
+            //Console.WriteLine("ERROR: " + e.ToString());
+            Console.WriteLine("ERROR: " + Utilities.ExceptionWithoutStackTrace(e));
         }
     } // Verify
 
@@ -449,7 +458,8 @@ public class CommandLineInterface
             Console.WriteLine(Hasher.GetSHA256Hash(bytes));
         }
         catch (Exception e){
-            Console.WriteLine(e.ToString());
+            //Console.WriteLine(e.ToString());
+            Console.WriteLine("ERROR: " + Utilities.ExceptionWithoutStackTrace(e));
         }
     }
 
@@ -461,7 +471,8 @@ public class CommandLineInterface
             Console.WriteLine(Hasher.GetSHA256Hash(contents));
         }
         catch (Exception e){
-            Console.WriteLine(e.ToString());
+            //Console.WriteLine(e.ToString());
+            Console.WriteLine("ERROR: " + Utilities.ExceptionWithoutStackTrace(e));
         }
     }
 

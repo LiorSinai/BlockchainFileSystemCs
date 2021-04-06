@@ -5,12 +5,13 @@
  */
 
 
+namespace BlockchainFileSystem
+{  
+
 using System;
 using System.Text;
 using System.Security.Cryptography;
-    
-namespace BlockchainFileSystem
-{  
+
 public static class Hasher
 {
     public static string GetSHA256Hash(string rawData)  

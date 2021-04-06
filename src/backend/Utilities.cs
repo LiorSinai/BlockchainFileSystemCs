@@ -15,6 +15,29 @@ class Utilities
     {
         return Convert.ToInt32((date - DateTime.UnixEpoch).TotalSeconds);
     }
+
+    public static string ExceptionWithoutStackTrace(Exception e){
+        string s = e.Message;
+        Exception? inner = e.InnerException;
+        while (inner != null){
+            s += "\n" + e.GetType() + " : " + inner.Message;
+            inner = inner.InnerException;
+        }
+
+        return s;
+    }
+
+    public static void Bytes_add_1(byte[] bytes, int first = 0)
+    {
+        int carry  = 1; 
+        int idx = bytes.Length - 1;
+        while (carry > 0 && idx >= first){
+             carry += bytes[idx];
+             bytes[idx] = (byte) carry;
+             carry >>= 8;
+             idx -= 1;
+        } // will overflow if idx < first
+    }
 }
 
 public class UnixDateTimeConverter : JsonConverter<DateTime>
@@ -29,5 +52,7 @@ public class UnixDateTimeConverter : JsonConverter<DateTime>
         writer.WriteNumberValue(Utilities.ConvertToUnixTimestamp(value));
     }
     }
+
+
 
 } // namespace BlockchainFileSystem

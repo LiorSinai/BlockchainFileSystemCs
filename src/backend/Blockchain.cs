@@ -95,7 +95,7 @@ public class Blockchain
 
     public void CommitBlock(Block block, bool doProofOfWork=true)
     {
-        // check
+        // checks
         if (block.Index != this.Index() + 1){ 
             throw new InvalidBlockchainException("Block index must follow last blockchain index: "+ block.Index + "!=" + (this.Index() + 1));
         }
@@ -113,7 +113,7 @@ public class Blockchain
             throw new InvalidBlockchainException("Block cannot be from the future: " + block.TimeStamp);
         }
         if (doProofOfWork){
-            uint proof = ProofOfWork(block.getHeader(), block.Target, 0);
+            uint proof = ProofOfWork(block.getHeader(), block.Target, block.Nonce);
             block.Nonce = proof;
         }
         this.Blocks.Add(block);
@@ -158,7 +158,7 @@ public class Blockchain
         Console.WriteLine("------------------------------------------------------------------------------------------------");
     }
 
-    bool IsValidProof(byte[] bytes, int target){
+    public static bool IsValidProof(byte[] bytes, int target){
         int n = target/8; // a byte has 8 bits
         for (int i = 0; i < n; i++){
             if (bytes[i] != 0 ) {return false;}
@@ -172,16 +172,18 @@ public class Blockchain
         }
     }
 
-    void Bytes_add_1(byte[] bytes, int first = 0)
-    {
-        int carry  = 1; 
-        int idx = bytes.Length - 1;
-        while (carry > 0 && idx >= first){
-             carry += bytes[idx];
-             bytes[idx] = (byte) carry;
-             carry >>= 8;
-             idx -= 1;
-        } // will overflow if idx < first
+    public static bool IsValidProof(string hash, int target){
+        int n = target/4; // a hex char has 4 bits
+        for (int i = 0; i < n; i++){
+            if (Hasher.GetHexVal(hash[i]) != 0 ) {return false;}
+        }
+        int rem = target - n * 4;
+        if (rem == 0){return true;}
+        else {
+            int i = n;
+            // e.g Convert.ToString((int)Math.Pow(2, 4-3)-1, 2) = 0001 = 1
+            return Hasher.GetHexVal(hash[i]) < Math.Pow(2, 4 - rem); 
+        }
     }
 
     uint ProofOfWork(byte[] bytes, uint target, uint start = 0)
@@ -218,7 +220,7 @@ public class Blockchain
         byte[] hash = hasher.ComputeHash(bytes_WIP);
 
         while (!IsValidProof(hash, (int)target)){
-            Bytes_add_1(bytes_WIP, first);
+            Utilities.Bytes_add_1(bytes_WIP, first);
             hash = hasher.ComputeHash(bytes_WIP);
         }
 

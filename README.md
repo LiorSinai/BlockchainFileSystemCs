@@ -33,7 +33,7 @@ This program was made using .NET 5.0 and requires it to run.
 Go to [dotnet.microsoft.com/download/dotnet/5.0](https://dotnet.microsoft.com/download/dotnet/5.0)
 to download it and install it.
 
-Once .NET is installed, in a terminal navigate to the /src folder and type ```dotnet run```.
+Once .NET is installed, in a terminal navigate to the BlockchainFileSystem02/src folder and type ```dotnet run```.
 See [docs.microsoft.com/en-us/dotnet/core/tools/dotnet-run](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-run) for more information.
 This should start the CLI and you'll be greated with 
 > Welcome to the Blockchain file system
@@ -75,12 +75,11 @@ Available commands:
  
  #### Load
  ```
- @admin > --load MyPersonalBlockChain/MyPersonalBlockChain.json //extracts MyPersonalBlockChain as the directory
- //... final line is:
- //verified!
- @admin > --stage-token   //follow prompts to stage a new token
- @admin > --print-block   
- @admin > --commit-block 
+@admin > --demo
+@admin > --load ../MyBlockChain/MyBlockChain.json
+@admin > --stage-token   //follow prompts to stage a new token
+@admin > --print-block   
+@admin > --commit-block 
 @admin > --print-blockchain 
  ```
 
@@ -112,4 +111,5 @@ It is strongly recommended to keep the target at 0.
 
 ## To do list:
 - Incremental saving to JSON. The current code saves the whole blockchain each time.
-- Threading, so the program can send messages back to the CLI for outputting interval messages during the proof of work. 
+- Threading, so the program can send messages back to the CLI for outputting interval messages during the proof of work.
+- Double hashing for protection against [length extension attacks](https://en.wikipedia.org/wiki/Length_extension_attack). 
