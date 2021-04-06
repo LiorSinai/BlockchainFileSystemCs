@@ -17,10 +17,10 @@ class Utilities
     }
 
     public static string ExceptionWithoutStackTrace(Exception e){
-        string s = e.Message;
+        string s = e.GetType() + " : " + e.Message;
         Exception? inner = e.InnerException;
         while (inner != null){
-            s += "\n" + e.GetType() + " : " + inner.Message;
+            s += "\n" + inner.GetType() + " : " + inner.Message;
             inner = inner.InnerException;
         }
 

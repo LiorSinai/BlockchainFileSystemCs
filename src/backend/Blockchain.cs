@@ -121,7 +121,7 @@ public class Blockchain
 
     public bool Verify()
     {
-        for (int i = 0; i < this.Index(); i++){
+        for (int i = 0; i < this.Height(); i++){
             try{
                 Blocks[i].Verify();
             }
