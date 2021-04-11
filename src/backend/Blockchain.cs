@@ -63,6 +63,7 @@ public class Blockchain
                 DirectoryInfo di = System.IO.Directory.CreateDirectory(this.BlockchainDirectory);
         }
         this.Blocks = new List<Block>();
+        this.Verified = true;
     }
 
     public Blockchain(string directory_, DateTime timeStamp_){
@@ -73,6 +74,7 @@ public class Blockchain
         this.TimeStamp = timeStamp_;
         //set defaults
         this.Blocks = new List<Block>();
+        this.Verified = true;
     }
 
     // functions
@@ -105,6 +107,10 @@ public class Blockchain
                 throw new InvalidBlockchainException("Previous block hashes do not match:\nProposed block:   " + block.PreviousHash +
                                                                                         "\nBlockchain block: " + previousHash);
             }
+            DateTime previousTime = this.Back().TimeStamp;
+            if (block.TimeStamp < previousTime){
+                throw new InvalidBlockchainException("Block must be created after previous block: " + block.TimeStamp + " < "  + previousTime);
+            }
         }
         if (Block.Version != Blockchain.Version){ 
             throw new InvalidBlockchainException("Block version differs from Blockchain version: "+ Block.Version + "!=" + Blockchain.Version);
@@ -112,8 +118,11 @@ public class Blockchain
         if (block.TimeStamp >= DateTime.UtcNow){ 
             throw new InvalidBlockchainException("Block cannot be from the future: " + block.TimeStamp);
         }
+        if (!this.Verified){
+            this.Verify();
+        }
         if (doProofOfWork){
-            uint proof = ProofOfWork(block.getHeader(), block.Target, block.Nonce);
+            uint proof = ProofOfWork(block.GetHeader(), block.Target, block.Nonce);
             block.Nonce = proof;
         }
         this.Blocks.Add(block);
@@ -126,13 +135,15 @@ public class Blockchain
                 Blocks[i].Verify();
             }
             catch(InvalidBlockException e){
+                this.Verified = false;
                 throw new InvalidBlockchainException("Blockchain is not valid", e);
             }
             catch(Exception e){
+                this.Verified = false;
                 throw new InvalidBlockchainException("Blockchain is not valid", e);
             }
-
         }
+        this.Verified = true;
         return true;
     }
 

@@ -79,6 +79,7 @@ public class BlockchainLoader
                 block.Tokens.Add(element.Key, t);
             }
             try{
+                block.CalcMerkleRoot();
                 blockchain.CommitBlock(block, false);
             }
             catch (InvalidBlockchainException e){

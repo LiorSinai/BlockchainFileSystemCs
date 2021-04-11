@@ -314,7 +314,7 @@ public class CommandLineInterface
             }
             else{
                 Console.WriteLine(headerFormat);
-                Console.WriteLine(Hasher.Bytes2hex(block.getHeader()));
+                Console.WriteLine(Hasher.Bytes2hex(block.GetHeader()));
             }
         }
         else
@@ -323,7 +323,7 @@ public class CommandLineInterface
             try{
                 Block blk = blockchain.At(index);
                 Console.WriteLine(headerFormat);
-                Console.WriteLine(Hasher.Bytes2hex(blk.getHeader()));
+                Console.WriteLine(Hasher.Bytes2hex(blk.GetHeader()));
             }
             catch (Exception e){
                 Console.WriteLine(e.Message);
@@ -334,7 +334,7 @@ public class CommandLineInterface
     private void SaveBlockchain(CLIArguments args)
     {
         string jsonName = blockchain.BlockchainDirectory + "/" + blockchain.Name + ".json";
-        Console.WriteLine("Writing to " + jsonName + " ... ");
+        Console.WriteLine("Saving to " + jsonName);
         var options = new JsonSerializerOptions
         {
             WriteIndented = true,
@@ -407,10 +407,10 @@ public class CommandLineInterface
             SaveBlockchain(args);
         }
         catch (InvalidBlockchainException e){
-            Console.WriteLine("ERROR: " + e.Message);
+            Console.WriteLine("ERROR: " + Utilities.ExceptionWithoutStackTrace(e));
         }
         catch (Exception e){
-            Console.WriteLine("ERROR: " + e.Message);
+            Console.WriteLine("ERROR: " + Utilities.ExceptionWithoutStackTrace(e));
         }
     }
 

@@ -18,7 +18,9 @@ class Utilities
 
     public static string ExceptionWithoutStackTrace(Exception e){
         string s = e.GetType() + " : " + e.Message;
+        #nullable enable
         Exception? inner = e.InnerException;
+        #nullable disable
         while (inner != null){
             s += "\n" + inner.GetType() + " : " + inner.Message;
             inner = inner.InnerException;

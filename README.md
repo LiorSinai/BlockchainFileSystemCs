@@ -25,13 +25,13 @@ This project however is not meant to be a production ready system; it is simply 
 
 It was a design choice to store the files in a normal directory, instead of lumping them into a single binary file.
 This makes the blockchain more tangible and interactive.
-It is STRONGLY ADVISEABLE TO NOT CHANGE ANYTHING in the blockchain directory because this will probably set the blockchain into an invalid state.
+It is STRONGLY ADVISEABLE TO NOT CHANGE ANYTHING in the blockchain directory.
+Doing otherwise risks putting the blockchain into an invalid state.
 
 ## Command Line Interface
 
 This program was made using .NET 5.0 and requires it to run.
-Go to [dotnet.microsoft.com/download/dotnet/5.0](https://dotnet.microsoft.com/download/dotnet/5.0)
-to download it and install it.
+It can be downloaded from [dotnet.microsoft.com/download/dotnet/5.0](https://dotnet.microsoft.com/download/dotnet/5.0).
 
 Once .NET is installed, in a terminal navigate to the BlockchainFileSystem02/src folder and type ```dotnet run```.
 See [docs.microsoft.com/en-us/dotnet/core/tools/dotnet-run](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-run) for more information.
@@ -97,7 +97,7 @@ Increasing the target by 1 doubles the difficulty and average time taken.
 A standard pc has 2GHz ~= 2^30 calcs/s of processing power.
 For my CPU, this means it can do about 1.4 million hashes/s ~= 2^20.4 hashes/s
 This means:
-* a target of 20 takes 1 seconds
+* a target of 20 takes 1 second
 * a target of 21 takes 2 seconds
 * a target of 22 takes 4 seconds
 *    .... 
@@ -106,7 +106,7 @@ This means:
 * a target of 45 will take 1 year
 * a target of 76 will take 2.3 billion years
 
-A target of 76 was the Bitcoin difficulty at the time of this commit. (Conversion: 256 - 208 - log2((2^16-1)/D) where D is the difficulty.)
+A target of 76 was the Bitcoin difficulty at the time of this commit. (Conversion: 256 - 208 + log2(D/(2^16-1)) where D is the difficulty.)
 It is strongly recommended to keep the target at 0.
 
 ## To do list:

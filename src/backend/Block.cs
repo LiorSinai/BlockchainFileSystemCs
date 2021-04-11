@@ -133,7 +133,8 @@ public class Block
             }
             if (hash != element.Key){
                 msgBlock += "\n";
-                msgBlock += "Token hashes do not match:\nOriginal:   " + element.Key + "\nCalculated: " + hash;
+                string tokenName = element.Value.FileName;
+                msgBlock += "token hash does not match for "+ tokenName + ":\nOriginal:   " + element.Key + "\nCalculated: " + hash;
                 throw new InvalidBlockException(msgBlock);
             }
         }
@@ -147,10 +148,11 @@ public class Block
         {
             ids.Add(element.Key);
         }
-        return MerkleTree.Root(ids);
+        this.MerkleRoot = MerkleTree.Root(ids);
+        return this.MerkleRoot;
     }
 
-    public byte[] getHeader(){
+    public byte[] GetHeader(){
         // version (4) | previousHash (32) | MerkleRoot (32) | timestamp (4) | target (4) | nonce (4)
         byte[] header = new byte[] {};
         byte[] bytes;
@@ -182,7 +184,7 @@ public class Block
     }
 
     public string Hash(){
-        return Hasher.GetSHA256Hash(this.getHeader());
+        return Hasher.GetSHA256Hash(this.GetHeader());
     }
         
 } // public class Block
